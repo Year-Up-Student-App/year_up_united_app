@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
+import 'widgets/bottom_nav.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,4 +26,20 @@ class MyApp extends StatelessWidget {
       home: const HomeScreen(), // this is the first screen that loads
     );
   }
+}
+
+class MainLayout extends StatefulWidget{
+  const MainLayout({super.key});
+  @override
+  State<MainLayout> createState() => _MainLayoutState();
+}
+
+class _MainLayoutState extends State<MainLayout>{
+
+  final List<Widget> _screens = [
+
+  ];
+
+  @override
+
 }
