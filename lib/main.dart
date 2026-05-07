@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'SF Pro Display', // matches your mockup font
       ),
-      home: const HomeScreen(), // this is the first screen that loads
+      home: const MainLayout(), // this is the first screen that loads
     );
   }
 }
@@ -36,10 +36,18 @@ class MainLayout extends StatefulWidget{
 
 class _MainLayoutState extends State<MainLayout>{
 
-  final List<Widget> _screens = [
+  int _selectedIndex = 0;
 
+  final List<Widget> _screens = [
+    const HomeScreen(),
   ];
 
   @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNav(),
+    );
+  }
 
 }

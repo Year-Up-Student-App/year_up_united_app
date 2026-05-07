@@ -21,22 +21,16 @@ class _BottomNavState extends State<BottomNav> {
           });
         },
         items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.edit_document),
-              label: 'Contract'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month),
-              label: 'Attendance'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: 'Connections'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.menu),
-              label: 'More'),
-        ]
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.description), label: 'Contract'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Attendance'),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Connections'),
+          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'More'),
+        ],
+        selectedItemColor: const Color(0xFF4A2C8F),
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+
     );
   }
 }

@@ -31,7 +31,6 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: _buildBottomNav(context),
     );
   }
 
@@ -416,23 +415,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  // ─── BOTTOM NAV ───────────────────────────────────────────
-  Widget _buildBottomNav(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed, // needed for 4+ items
-      selectedItemColor: const Color(0xFF4A2C8F),
-      unselectedItemColor: Colors.grey,
-      currentIndex: 0, // 0 = Home is selected
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.description), label: 'Contract'),
-        BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Attendance'),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Connections'),
-        BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'More'),
-      ],
     );
   }
 }
