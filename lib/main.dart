@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/attendance_screen.dart';
+import 'package:flutter_app/screens/connections.dart';
+import 'package:flutter_app/screens/profile_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/contract_screen.dart';
 import 'widgets/bottom_nav.dart';
@@ -41,7 +44,10 @@ class _MainLayoutState extends State<MainLayout>{
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const ContractScreen()
+    const ContractScreen(),
+    const AttendanceScreen(),
+    const ConnectionsScreen(),
+    const ProfileScreen(),
   ];
 
   @override
