@@ -21,8 +21,8 @@ class ContractScreen extends StatelessWidget{
 
   Widget _buildHeader() {
     return Container(
-      width: ,
-      color: ,
+      width: double.infinity,
+      color: const Color(0xFF3D1A8C),
       padding: EdgeInsets.fromLTRB(20, 50, 20, 30),
     );
   }

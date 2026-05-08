@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BottomNav extends StatefulWidget {
-  const BottomNav({super.key});
+  final Function(int) onTabSelected;
+  const BottomNav({super.key, required this.onTabSelected});
   @override
   State<BottomNav> createState() => _BottomNavState();
 }
@@ -19,6 +20,7 @@ class _BottomNavState extends State<BottomNav> {
           setState(() {
             _selectedIndex = index;
           });
+          widget.onTabSelected(index);
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

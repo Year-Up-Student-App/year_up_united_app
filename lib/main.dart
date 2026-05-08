@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
+import 'screens/contract_screen.dart';
 import 'widgets/bottom_nav.dart';
 
 void main() {
@@ -40,13 +41,18 @@ class _MainLayoutState extends State<MainLayout>{
 
   final List<Widget> _screens = [
     const HomeScreen(),
+    const ContractScreen()
   ];
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
       body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNav(),
+      bottomNavigationBar: BottomNav(
+        onTabSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+      });  },),
     );
   }
 
