@@ -6,15 +6,15 @@ class AttendanceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFF0EFF5),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(),
-              _buildSummaryCards(),
-              _buildAttendanceLog(),
+              _buildStatGrid(),
+              _buildWeeklyHistory(),
               const SizedBox(height: 20),
             ],
           ),
@@ -23,75 +23,144 @@ class AttendanceScreen extends StatelessWidget {
     );
   }
 
+  // ─── HEADER with QR button ────────────────────────────────
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
       color: const Color(0xFF4A2C8F),
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('Attendance',
-              style: TextStyle(
-                  color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-          SizedBox(height: 4),
-          Text('Spring 2026 · Week 18',
-              style: TextStyle(color: Colors.white70, fontSize: 13)),
+        children: [
+          const Text(
+            'Attendance',
+            style: TextStyle(
+                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          // QR scan button
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE8533F),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.qr_code_scanner,
+                      color: Colors.white, size: 22),
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Scan check-in QR code',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(height: 2),
+                      Text("Opens camera to scan today's code",
+                          style:
+                          TextStyle(color: Colors.white70, fontSize: 12)),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right, color: Colors.white),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSummaryCards() {
+  // ─── 2x2 STAT GRID ───────────────────────────────────────
+  Widget _buildStatGrid() {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Row(
+      child: Column(
         children: [
-          _buildStatCard('97%', 'Attendance\nRate', const Color(0xFF4A2C8F)),
-          const SizedBox(width: 12),
-          _buildStatCard('1', 'Absences', const Color(0xFFE8533F)),
-          const SizedBox(width: 12),
-          _buildStatCard('2', 'Tardies', const Color(0xFFE8A838)),
+          Row(
+            children: [
+              _buildStatCard('16/18', 'Days present'),
+              const SizedBox(width: 12),
+              _buildStatCard('2 left', 'PTO remaining'),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              _buildStatCard('1', 'Late arrivals'),
+              const SizedBox(width: 12),
+              _buildStatCard('89%', 'Attendance rate'),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatCard(String value, String label, Color color) {
+  Widget _buildStatCard(String value, String label) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2))
+          ],
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(value,
-                style: TextStyle(
-                    fontSize: 22, fontWeight: FontWeight.bold, color: color)),
+                style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4A2C8F))),
             const SizedBox(height: 4),
             Text(label,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                style:
+                const TextStyle(fontSize: 13, color: Colors.grey)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAttendanceLog() {
-    final records = [
-      {'date': 'May 7', 'day': 'Wed', 'status': 'present', 'note': 'On time'},
-      {'date': 'May 6', 'day': 'Tue', 'status': 'tardy', 'note': '8 min late'},
-      {'date': 'May 5', 'day': 'Mon', 'status': 'present', 'note': 'On time'},
-      {'date': 'May 2', 'day': 'Fri', 'status': 'present', 'note': 'On time'},
-      {'date': 'May 1', 'day': 'Thu', 'status': 'excused', 'note': 'Doctor appt.'},
-      {'date': 'Apr 30', 'day': 'Wed', 'status': 'present', 'note': 'On time'},
-      {'date': 'Apr 28', 'day': 'Mon', 'status': 'absent', 'note': 'Unexcused'},
-      {'date': 'Apr 25', 'day': 'Fri', 'status': 'present', 'note': 'On time'},
-      {'date': 'Apr 24', 'day': 'Thu', 'status': 'tardy', 'note': '15 min late'},
+  // ─── WEEKLY HISTORY ───────────────────────────────────────
+  Widget _buildWeeklyHistory() {
+    final weeks = [
+      {
+        'label': 'Week 18 · Apr 28 – May 2',
+        'badge': 'Full',
+        'badgeColor': const Color(0xFF34A853),
+        'days': ['P', 'P', 'P', 'P', 'P'],
+      },
+      {
+        'label': 'Week 17 · Apr 21 – Apr 25',
+        'badge': '1 Late',
+        'badgeColor': const Color(0xFFE8A838),
+        'days': ['P', 'L', 'P', 'P', 'P'],
+      },
+      {
+        'label': 'Week 16 · Apr 14 – Apr 18',
+        'badge': '1 Absent',
+        'badgeColor': const Color(0xFFE8533F),
+        'days': ['P', 'A', 'P', 'P', 'R'],
+      },
     ];
 
     return Padding(
@@ -99,67 +168,122 @@ class AttendanceScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('RECENT ATTENDANCE',
+          const Text('WEEKLY HISTORY',
               style: TextStyle(
-                  fontSize: 11, fontWeight: FontWeight.w700,
-                  letterSpacing: 0.8, color: Colors.grey)),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.8,
+                  color: Colors.grey)),
           const SizedBox(height: 10),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
-            ),
-            child: Column(
-              children: records.asMap().entries.map((entry) {
-                final r = entry.value;
-                return _buildRow(r['date']!, r['day']!, r['status']!, r['note']!,
-                    isLast: entry.key == records.length - 1);
-              }).toList(),
-            ),
+          ...weeks.map((w) => _buildWeekCard(
+            w['label'] as String,
+            w['badge'] as String,
+            w['badgeColor'] as Color,
+            w['days'] as List<String>,
+          )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeekCard(
+      String label, String badge, Color badgeColor, List<String> days) {
+    const dayNames = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2))
+        ],
+      ),
+      child: Column(
+        children: [
+          // Week label + badge
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(label,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold)),
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: badgeColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(badge,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: badgeColor)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          // Day dots
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(5, (i) {
+              return _buildDayDot(dayNames[i], days[i]);
+            }),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildRow(String date, String day, String status, String note,
-      {bool isLast = false}) {
-    final Map<String, dynamic> config = switch (status) {
-      'present' => {'color': const Color(0xFF34A853), 'icon': Icons.check_circle, 'label': 'Present'},
-      'absent'  => {'color': const Color(0xFFE8533F), 'icon': Icons.cancel,       'label': 'Absent'},
-      'tardy'   => {'color': const Color(0xFFE8A838), 'icon': Icons.watch_later,  'label': 'Tardy'},
-      'excused' => {'color': const Color(0xFF4A9BE8), 'icon': Icons.info,         'label': 'Excused'},
-      _         => {'color': Colors.grey,             'icon': Icons.help,         'label': 'Unknown'},
-    };
+  Widget _buildDayDot(String dayName, String status) {
+    Color dotColor;
+    String label;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border: isLast ? null : const Border(bottom: BorderSide(color: Color(0xFFF0F0F0))),
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 52,
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(date, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-              Text(day, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-            ]),
-          ),
-          const SizedBox(width: 12),
-          Icon(config['icon'] as IconData, color: config['color'] as Color, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(config['label'] as String,
-                  style: TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w600, color: config['color'] as Color)),
-              Text(note, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-            ]),
-          ),
-        ],
-      ),
+    switch (status) {
+      case 'P':
+        dotColor = const Color(0xFF4A2C8F);
+        label = '✓';
+        break;
+      case 'L':
+        dotColor = const Color(0xFFE8A838);
+        label = 'L';
+        break;
+      case 'A':
+        dotColor = const Color(0xFFE8533F);
+        label = 'A';
+        break;
+      case 'R': // remote / other
+        dotColor = const Color(0xFF9E9E9E);
+        label = 'R';
+        break;
+      default:
+        dotColor = Colors.grey.shade300;
+        label = '-';
+    }
+
+    return Column(
+      children: [
+        Text(dayName,
+            style: const TextStyle(
+                fontSize: 11, color: Colors.grey, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 6),
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: dotColor),
+          alignment: Alignment.center,
+          child: Text(label,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold)),
+        ),
+      ],
     );
   }
 }

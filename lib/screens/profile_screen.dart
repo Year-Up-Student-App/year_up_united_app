@@ -3,133 +3,245 @@ import 'package:flutter/material.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-        return Scaffold(
-                backgroundColor: const Color(0xFFF5F5F5),
-                body: SafeArea(
-                child: SingleChildScrollView(
-                child: Column(
-                children: [
-        _buildProfileHeader(),
-                _buildMenuSection('PROGRAM', [
-                        {'icon': Icons.bar_chart, 'label': 'My Progress', 'color': '4A2C8F'},
-        {'icon': Icons.emoji_events, 'label': 'Achievements', 'color': 'E8A838'},
-        {'icon': Icons.work_outline, 'label': 'WBE Placements', 'color': '34A853'},
-              ]),
-        _buildMenuSection('RESOURCES', [
-                {'icon': Icons.menu_book, 'label': 'Student Handbook', 'color': '4A2C8F'},
-        {'icon': Icons.help_outline, 'label': 'FAQ / Support', 'color': '4A9BE8'},
-        {'icon': Icons.calendar_month, 'label': 'Program Calendar', 'color': 'E8A838'},
-              ]),
-        _buildMenuSection('ACCOUNT', [
-                {'icon': Icons.notifications_outlined, 'label': 'Notifications', 'color': '4A2C8F'},
-        {'icon': Icons.settings_outlined, 'label': 'Settings', 'color': '757575'},
-        {'icon': Icons.logout, 'label': 'Sign Out', 'color': 'E8533F'},
-              ]),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF0EFF5),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildProfileHeader(),
               const SizedBox(height: 20),
+              _buildInfoCard(
+                title: 'Personal info',
+                children: [
+                  _buildInfoRow('Full name', 'Kendall Dillon'),
+                  _buildInfoRow('Pronouns', 'He/Him'),
+                  _buildInfoRow('Location', 'Red Oak, TX'),
+                  _buildInfoRow('Phone', '773-383-8814', muted: true),
+                  _buildInfoRow('LinkedIn', 'linkedin.com/in/kendall-dillon',
+                      isLink: true),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _buildInfoCard(
+                title: 'About me',
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      'Motivated IT student passionate about network security and helping teams solve technical problems. Looking to grow in the cybersecurity space after WBE.',
+                      style: TextStyle(fontSize: 14, color: Colors.black87, height: 1.5),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _buildInfoCard(
+                title: 'Skills',
+                children: [
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      'Network Security',
+                      'Python',
+                      'Help Desk',
+                      'Linux',
+                      'Customer Service',
+                      'Java',
+                      'Flutter',
+                      'Spring boot',
+                      'Github',
+                      'Communication Skills',
+                      'Scrum Master'
+                    ].map((s) => _buildSkillChip(s)).toList(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _buildInfoCard(
+                title: 'Career goals',
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      'Aiming for a Jr Software Developer role, or a Developer Security role after completing the YU program and WBE internship.',
+                      style: TextStyle(fontSize: 14, color: Colors.black87, height: 1.5),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
       ),
     );
-    }
+  }
 
-    Widget _buildProfileHeader() {
-        return Container(
-                width: double.infinity,
-                color: const Color(0xFF4A2C8F),
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
-                child: Column(
-                children: [
-          const CircleAvatar(
-                radius: 36,
+  // ─── PROFILE HEADER ───────────────────────────────────────
+  Widget _buildProfileHeader() {
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF4A2C8F),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
+      child: Column(
+        children: [
+          // Avatar with edit icon
+          Stack(
+            children: [
+              const CircleAvatar(
+                radius: 42,
                 backgroundColor: Color(0xFFE8533F),
                 child: Text('JD',
-                style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26)),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF4A2C8F),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.edit, color: Colors.white, size: 14),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
-          const Text('Jordan Davis',
-                style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+          const Text('Kendall Dillon',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          const Text('Software Development Track',
-                style: TextStyle(color: Colors.white70, fontSize: 13)),
-          const SizedBox(height: 12),
-        Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(20),
-            ),
-        child: const Text('Dallas · Spring 2026 Cohort',
-                style: TextStyle(color: Colors.white, fontSize: 12)),
+          const Text('he/him · Red Oak, TX',
+              style: TextStyle(color: Colors.white70, fontSize: 13)),
+          const SizedBox(height: 14),
+          // Tag pills
+          Wrap(
+            spacing: 8,
+            children: [
+              _buildPill('Student', outline: true),
+              _buildPill('App Dev Track', filled: true),
+              _buildPill("Spring '26", outline: true),
+            ],
           ),
         ],
       ),
     );
-    }
+  }
 
-    Widget _buildMenuSection(String title, List<Map<String, dynamic>> items) {
-        return Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-        Text(title,
-                style: const TextStyle(
-                fontSize: 11, fontWeight: FontWeight.w700,
-                letterSpacing: 0.8, color: Colors.grey)),
-          const SizedBox(height: 8),
-        Container(
-                decoration: BoxDecoration(
+  Widget _buildPill(String label,
+      {bool outline = false, bool filled = false}) {
+    if (filled) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0xFFE8533F),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(label,
+            style: const TextStyle(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
-            ),
-        child: Column(
-                children: items.asMap().entries.map((entry) {
-        final item = entry.value;
-        return _buildMenuItem(
-                item['icon'] as IconData,
-                item['label'] as String,
-                Color(int.parse('FF${item['color']}', radix: 16)),
-        isLast: entry.key == items.length - 1,
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
+                fontSize: 13,
+                fontWeight: FontWeight.w600)),
+      );
     }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white54),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(label,
+          style: const TextStyle(color: Colors.white, fontSize: 13)),
+    );
+  }
 
-    Widget _buildMenuItem(IconData icon, String label, Color color,
-    {bool isLast = false}) {
-        return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-                border: isLast ? null : const Border(bottom: BorderSide(color: Color(0xFFF0F0F0))),
+  // ─── INFO CARD ────────────────────────────────────────────
+  Widget _buildInfoCard(
+      {required String title, required List<Widget> children}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2))
+        ],
       ),
-        child: Row(
-                children: [
-        Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-            ),
-        child: Icon(icon, color: color, size: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text('Edit',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF4A2C8F),
+                      fontWeight: FontWeight.w600)),
+            ],
           ),
-          const SizedBox(width: 14),
-        Expanded(
-                child: Text(label,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-          ),
-        Icon(Icons.chevron_right, color: Colors.grey.shade400),
+          ...children,
         ],
       ),
     );
-    }
+  }
+
+  Widget _buildInfoRow(String label, String value,
+      {bool muted = false, bool isLink = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style:
+              const TextStyle(fontSize: 14, color: Colors.grey)),
+          Text(value,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: isLink
+                      ? const Color(0xFF4A9BE8)
+                      : muted
+                      ? Colors.grey
+                      : Colors.black87,
+                  fontWeight:
+                  muted ? FontWeight.normal : FontWeight.w500)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSkillChip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0EDF8),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(label,
+          style: const TextStyle(
+              fontSize: 13,
+              color: Color(0xFF4A2C8F),
+              fontWeight: FontWeight.w500)),
+    );
+  }
 }

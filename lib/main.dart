@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/attendance_screen.dart';
-import 'package:flutter_app/screens/connections.dart';
+import 'package:flutter_app/screens/connections_screen.dart';
 import 'package:flutter_app/screens/profile_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/contract_screen.dart';
