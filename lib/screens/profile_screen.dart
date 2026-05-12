@@ -7,6 +7,14 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF0EFF5),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF4A2C8F), // same purple as header
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -87,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: const Color(0xFF4A2C8F),
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
       child: Column(
         children: [
           // Avatar with edit icon

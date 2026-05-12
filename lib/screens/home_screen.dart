@@ -1,82 +1,62 @@
 import 'package:flutter/material.dart';
 
-// This is a StatelessWidget — like a Java class with no changing fields
-// We use StatelessWidget when the screen doesn't need to update itself
+const _primary = Color(0xFF3D1D8C);
+const _primaryDark = Color(0xFF2B1167);
+const _accent = Color(0xFFF25C3E);
+const _orange = Color(0xFFF8941F);
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold is the base "page" widget — every screen has one
-    // Think of it like the outer shell of your screen
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
-
-      // The body is everything visible on screen
-      body: SafeArea(
-        // SafeArea keeps content away from the camera notch & status bar
-        child: SingleChildScrollView(
-          // SingleChildScrollView makes the whole page scrollable
-          child: Column(
-            // Column stacks widgets vertically, like a vertical LinearLayout in Android
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),        // purple top section
-              _buildProgressCard(),  // program progress card
-              _buildTodosSection(),  // upcoming & to-dos
-              _buildAnnouncements(), // announcements
-              const SizedBox(height: 20), // bottom padding
-            ],
-          ),
-        ),
-      ),
-
-    );
-  }
-
-  // ─── HEADER ───────────────────────────────────────────────
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity, // stretch to full width
-      color: const Color(0xFF4A2C8F), // purple
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-      child: Row(
-        // Row lays things out horizontally
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: const Color(0xFFF7F7F9),
+      body: Column(
         children: [
-          // Left side: greeting text
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                'Good morning, Jordan 👋',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 4), // tiny vertical gap
-              Text(
-                'Dallas Learning Community · Week 18',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 13,
-                ),
-              ),
-            ],
-          ),
-
-          // Right side: avatar circle with initials
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: const Color(0xFFE8533F), // orange-red
-            child: const Text(
-              'JD',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+          _buildHeader(),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProgressCard(),
+                  _buildSectionLabel('Upcoming & To-Dos'),
+                  _buildTodoCard(
+                    month: 'MAY', day: '8',
+                    title: 'Weekly contract review',
+                    subtitle: 'Today · 2:00 PM',
+                    tag: 'To-do',
+                    tagBg: const Color(0xFFFFE2DC),
+                    tagText: const Color(0xFFE55738),
+                    stripe: _primary,
+                    dateBg: _primary,
+                  ),
+                  _buildTodoCard(
+                    month: 'MAY', day: '9',
+                    title: 'Professional skills workshop',
+                    subtitle: 'Thu · 10:00 AM',
+                    tag: 'Event',
+                    tagBg: const Color(0xFFFFE9CE),
+                    tagText: const Color(0xFFC97A12),
+                    stripe: _orange,
+                    dateBg: _orange,
+                  ),
+                  _buildTodoCard(
+                    month: 'MAY', day: '10',
+                    title: 'Submit reflection journal',
+                    subtitle: 'Fri · Due by 5 PM',
+                    tag: 'To-do',
+                    tagBg: const Color(0xFFFFE2DC),
+                    tagText: const Color(0xFFE55738),
+                    stripe: _primary,
+                    dateBg: _primary,
+                  ),
+                  _buildSectionLabel('Announcements'),
+                  _buildAnnouncementCard(),
+                  const SizedBox(height: 8),
+                ],
               ),
             ),
           ),
@@ -85,26 +65,76 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ─── PROGRESS CARD ────────────────────────────────────────
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [_primary, _primaryDark],
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(22, 56, 22, 28),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Good morning, Jordan 👋',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.5,
+                    height: 1.15,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  'Dallas Learning Community · Week 18',
+                  style: TextStyle(
+                    color: Color(0xBFFFFFFF),
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          CircleAvatar(
+            radius: 21,
+            backgroundColor: _accent,
+            child: const Text(
+              'JD',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildProgressCard() {
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 0, bottom: 0),
+      transform: Matrix4.translationValues(0, -8, 0),
+      padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12), // rounded corners
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 32, offset: const Offset(0, 12)),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // "PROGRAM PROGRESS" label + percentage
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
@@ -112,51 +142,53 @@ class HomeScreen extends StatelessWidget {
                 'PROGRAM PROGRESS',
                 style: TextStyle(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.8,
-                  color: Colors.grey,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.88,
+                  color: Color(0xFF7A7A86),
                 ),
               ),
               Text(
                 '62%',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: _primary),
               ),
             ],
           ),
           const SizedBox(height: 8),
-
           const Text(
             'Training Phase — 18 of 29 weeks',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF18181F), letterSpacing: -0.2),
           ),
-          const SizedBox(height: 10),
-
-          // Progress bar
+          const SizedBox(height: 14),
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: 0.62, // 62% — this is a number between 0.0 and 1.0
-              minHeight: 8,
-              backgroundColor: Colors.grey.shade200,
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                Color(0xFFE8533F), // orange-red bar
+            borderRadius: BorderRadius.circular(999),
+            child: Container(
+              height: 8,
+              color: const Color(0xFFF0F0F4),
+              child: FractionallySizedBox(
+                widthFactor: 1.0,
+                child: LayoutBuilder(
+                  builder: (_, constraints) => Stack(
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (rect) => const LinearGradient(
+                          colors: [_primary, _accent],
+                        ).createShader(rect),
+                        child: Container(
+                          width: constraints.maxWidth * 0.62,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 14),
-
-          // Two stat boxes side by side
+          const SizedBox(height: 16),
           Row(
             children: [
               _buildStatBox('18 wks', 'Training complete'),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
               _buildStatBox('11 wks', 'Until WBE phase'),
             ],
           ),
@@ -165,31 +197,129 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Reusable small stat box — this is like a helper method in Java
   Widget _buildStatBox(String value, String label) {
     return Expanded(
-      // Expanded makes both boxes share the available space equally
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
         decoration: BoxDecoration(
-          color: const Color(0xFFF0EDFA), // light purple tint
-          borderRadius: BorderRadius.circular(8),
+          color: const Color(0xFFF0F0F4),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF4A2C8F),
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: _primary, letterSpacing: -0.3),
             ),
             const SizedBox(height: 2),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF7A7A86), fontWeight: FontWeight.w500)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 16, 4, 12),
+      child: Text(
+        label.toUpperCase(),
+        style: const TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.88,
+          color: Color(0xFF7A7A86),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTodoCard({
+    required String month,
+    required String day,
+    required String title,
+    required String subtitle,
+    required String tag,
+    required Color tagBg,
+    required Color tagText,
+    required Color stripe,
+    required Color dateBg,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6, offset: const Offset(0, 1))],
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(width: 4, color: stripe),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(color: dateBg, borderRadius: BorderRadius.circular(11)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            month,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          Text(
+                            day,
+                            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700, height: 1.05),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF18181F),
+                              letterSpacing: -0.1,
+                              height: 1.25,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            style: const TextStyle(fontSize: 12.5, color: Color(0xFF7A7A86), fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(color: tagBg, borderRadius: BorderRadius.circular(999)),
+                      child: Text(tag, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: tagText)),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -197,218 +327,37 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ─── TO-DOS SECTION ───────────────────────────────────────
-  Widget _buildTodosSection() {
-    // Our todo data — later this will come from a real API
-    final todos = [
-      {
-        'month': 'MAY',
-        'day': '8',
-        'title': 'Weekly contract review',
-        'subtitle': 'Today · 2:00 PM',
-        'tag': 'To-do',
-        'tagColor': Color(0xFFE8533F),
-        'accentColor': Color(0xFF4A2C8F),
-      },
-      {
-        'month': 'MAY',
-        'day': '9',
-        'title': 'Professional skills workshop',
-        'subtitle': 'Thu · 10:00 AM',
-        'tag': 'Event',
-        'tagColor': Color(0xFFE8A838),
-        'accentColor': Color(0xFFE8A838),
-      },
-      {
-        'month': 'MAY',
-        'day': '10',
-        'title': 'Submit reflection journal',
-        'subtitle': 'Fri · Due by 5 PM',
-        'tag': 'To-do',
-        'tagColor': Color(0xFFE8533F),
-        'accentColor': Color(0xFF4A2C8F),
-      },
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'UPCOMING & TO-DOS',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.8,
-              color: Colors.grey,
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Loop through todos and build a card for each
-          // .map() is like Java's stream().map()
-          ...todos.map((todo) => _buildTodoCard(todo)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTodoCard(Map<String, dynamic> todo) {
+  Widget _buildAnnouncementCard() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4, offset: const Offset(0, 1))],
       ),
       child: Row(
-        children: [
-          // Colored date box on the left
-          Container(
-            width: 44,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              color: todo['accentColor'] as Color,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  todo['month'] as String,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 9,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-                Text(
-                  todo['day'] as String,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-
-          // Title + subtitle in the middle
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  todo['title'] as String,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  todo['subtitle'] as String,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Tag badge on the right
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: (todo['tagColor'] as Color).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              todo['tag'] as String,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: todo['tagColor'] as Color,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── ANNOUNCEMENTS ────────────────────────────────────────
-  Widget _buildAnnouncements() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'ANNOUNCEMENTS',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.8,
-              color: Colors.grey,
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Container(
+              width: 7, height: 7,
+              decoration: const BoxDecoration(color: _accent, shape: BoxShape.circle),
             ),
           ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
+          const SizedBox(width: 10),
+          const Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Red dot indicator
-                Container(
-                  margin: const EdgeInsets.only(top: 5, right: 8),
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
+                Text(
+                  'New WBE placements posted',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF18181F)),
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'New WBE placements posted',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Check the internship board — 12 new positions ...',
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
-                      ),
-                    ],
-                  ),
+                SizedBox(height: 4),
+                Text(
+                  'Check the internship board — 12 new positions added this week.',
+                  style: TextStyle(fontSize: 13, color: Color(0xFF7A7A86), fontWeight: FontWeight.w500),
                 ),
               ],
             ),
