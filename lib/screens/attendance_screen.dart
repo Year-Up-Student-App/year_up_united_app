@@ -161,6 +161,18 @@ class AttendanceScreen extends StatelessWidget {
         'badgeColor': const Color(0xFFE8533F),
         'days': ['P', 'A', 'P', 'P', 'R'],
       },
+      {
+        'label': 'Week 15 · Apr 8 – Apr 12',
+        'badge': '2 Absent',
+        'badgeColor': const Color(0xFFE8533F),
+        'days': ['A', 'A', 'P', 'P', 'R'],
+      },
+      {
+        'label': 'Week 16 · Apr 8 – Apr 12',
+        'badge': '2 Absent',
+        'badgeColor': const Color(0xFFE8533F),
+        'days': ['A', 'A', 'P', 'P', 'R'],
+      },
     ];
 
     return Padding(
