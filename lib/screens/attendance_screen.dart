@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/qr_scanner_screen.dart';
 
 class AttendanceScreen extends StatelessWidget {
   const AttendanceScreen({super.key});
@@ -12,7 +13,7 @@ class AttendanceScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
+              _buildHeader(context),
               _buildStatGrid(),
               _buildWeeklyHistory(),
               const SizedBox(height: 20),
@@ -24,7 +25,7 @@ class AttendanceScreen extends StatelessWidget {
   }
 
   // ─── HEADER with QR button ────────────────────────────────
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Container(
       width: double.infinity,
       color: const Color(0xFF4A2C8F),
@@ -39,44 +40,51 @@ class AttendanceScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           // QR scan button
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE8533F),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const QrScannerScreen()));
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8533F),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.qr_code_scanner,
+                        color: Colors.white, size: 22),
                   ),
-                  child: const Icon(Icons.qr_code_scanner,
-                      color: Colors.white, size: 22),
-                ),
-                const SizedBox(width: 14),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Scan check-in QR code',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(height: 2),
-                      Text("Opens camera to scan today's code",
-                          style:
-                          TextStyle(color: Colors.white70, fontSize: 12)),
-                    ],
+                  const SizedBox(width: 14),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Scan check-in QR code',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(height: 2),
+                        Text("Opens camera to scan today's code",
+                            style:
+                            TextStyle(color: Colors.white70, fontSize: 12)),
+                      ],
+                    ),
                   ),
-                ),
-                const Icon(Icons.chevron_right, color: Colors.white),
-              ],
+                  const Icon(Icons.chevron_right, color: Colors.white),
+                ],
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -171,7 +179,7 @@ class AttendanceScreen extends StatelessWidget {
         'label': 'Week 16 · Apr 8 – Apr 12',
         'badge': '2 Absent',
         'badgeColor': const Color(0xFFE8533F),
-        'days': ['A', 'A', 'P', 'P', 'R'],
+        'days': ['A', 'A', 'P', 'P', '-'],
       },
     ];
 
