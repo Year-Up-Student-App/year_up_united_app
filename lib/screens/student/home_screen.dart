@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/services/api_service.dart';
 
 const _primary = Color(0xFF3D1D8C);
 const _primaryDark = Color(0xFF2B1167);
 const _accent = Color(0xFFF25C3E);
 const _orange = Color(0xFFF8941F);
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  final String token;
+  const HomeScreen({super.key, required this.token});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Map<String, dynamic>? student;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStudent();
+  }
+
+  Future<void> _loadStudent() async {
+    final data = await ApiService.getStudent(1, widget.token);
+    setState(() {
+      student = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +88,13 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildHeader() {
+    final firstName = student?['firstName'] ?? '';
+    final lastName = student?['lastName'] ?? '';
+    final initials = firstName.isNotEmpty && lastName.isNotEmpty
+        ? '${firstName[0]}${lastName[0]}'
+        : '??';
+    final lcName = student?['learningCommunity']?['name'] ?? 'Loading...';
+
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -82,10 +111,12 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  'Good morning, Jordan 👋',
-                  style: TextStyle(
+                  student == null
+                      ? 'Good morning 👋'
+                      : 'Good morning, $firstName 👋',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 26,
                     fontWeight: FontWeight.w700,
@@ -93,10 +124,10 @@ class HomeScreen extends StatelessWidget {
                     height: 1.15,
                   ),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 Text(
-                  'Dallas Learning Community · Week 18',
-                  style: TextStyle(
+                  '$lcName · Week 18',
+                  style: const TextStyle(
                     color: Color(0xBFFFFFFF),
                     fontSize: 13.5,
                     fontWeight: FontWeight.w500,
@@ -109,9 +140,12 @@ class HomeScreen extends StatelessWidget {
           CircleAvatar(
             radius: 21,
             backgroundColor: _accent,
-            child: const Text(
-              'JD',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+            child: Text(
+              initials,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14),
             ),
           ),
         ],
@@ -128,8 +162,14 @@ class HomeScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 8, offset: const Offset(0, 2)),
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 32, offset: const Offset(0, 12)),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 8,
+              offset: const Offset(0, 2)),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 32,
+              offset: const Offset(0, 12)),
         ],
       ),
       child: Column(
@@ -149,14 +189,21 @@ class HomeScreen extends StatelessWidget {
               ),
               Text(
                 '62%',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: _primary),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: _primary),
               ),
             ],
           ),
           const SizedBox(height: 8),
           const Text(
             'Training Phase — 18 of 29 weeks',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF18181F), letterSpacing: -0.2),
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF18181F),
+                letterSpacing: -0.2),
           ),
           const SizedBox(height: 14),
           ClipRRect(
@@ -210,10 +257,18 @@ class HomeScreen extends StatelessWidget {
           children: [
             Text(
               value,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: _primary, letterSpacing: -0.3),
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: _primary,
+                  letterSpacing: -0.3),
             ),
             const SizedBox(height: 2),
-            Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF7A7A86), fontWeight: FontWeight.w500)),
+            Text(label,
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF7A7A86),
+                    fontWeight: FontWeight.w500)),
           ],
         ),
       ),
@@ -251,7 +306,12 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6, offset: const Offset(0, 1))],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 1))
+        ],
       ),
       clipBehavior: Clip.hardEdge,
       child: IntrinsicHeight(
@@ -267,7 +327,9 @@ class HomeScreen extends StatelessWidget {
                     Container(
                       width: 46,
                       height: 46,
-                      decoration: BoxDecoration(color: dateBg, borderRadius: BorderRadius.circular(11)),
+                      decoration: BoxDecoration(
+                          color: dateBg,
+                          borderRadius: BorderRadius.circular(11)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -282,7 +344,11 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Text(
                             day,
-                            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700, height: 1.05),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                height: 1.05),
                           ),
                         ],
                       ),
@@ -306,16 +372,26 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(height: 2),
                           Text(
                             subtitle,
-                            style: const TextStyle(fontSize: 12.5, color: Color(0xFF7A7A86), fontWeight: FontWeight.w500),
+                            style: const TextStyle(
+                                fontSize: 12.5,
+                                color: Color(0xFF7A7A86),
+                                fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(color: tagBg, borderRadius: BorderRadius.circular(999)),
-                      child: Text(tag, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: tagText)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                          color: tagBg,
+                          borderRadius: BorderRadius.circular(999)),
+                      child: Text(tag,
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: tagText)),
                     ),
                   ],
                 ),
@@ -333,7 +409,12 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4, offset: const Offset(0, 1))],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 1))
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,8 +422,10 @@ class HomeScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Container(
-              width: 7, height: 7,
-              decoration: const BoxDecoration(color: _accent, shape: BoxShape.circle),
+              width: 7,
+              height: 7,
+              decoration: const BoxDecoration(
+                  color: _accent, shape: BoxShape.circle),
             ),
           ),
           const SizedBox(width: 10),
@@ -352,12 +435,18 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   'New WBE placements posted',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF18181F)),
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF18181F)),
                 ),
                 SizedBox(height: 4),
                 Text(
                   'Check the internship board — 12 new positions added this week.',
-                  style: TextStyle(fontSize: 13, color: Color(0xFF7A7A86), fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF7A7A86),
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),
