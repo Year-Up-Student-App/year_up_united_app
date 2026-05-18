@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import '../widgets/auth_widgets.dart';
+import '../services/api_service.dart';
 
 class SignInPasswordScreen extends StatefulWidget {
   final String email;
   final void Function() onBack;
-  final void Function() onSubmit;
   final void Function() onSetupPassword;
 
   const SignInPasswordScreen({
     super.key,
     required this.email,
     required this.onBack,
-    required this.onSubmit,
     required this.onSetupPassword,
   });
 
@@ -22,6 +21,8 @@ class SignInPasswordScreen extends StatefulWidget {
 class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
   final TextEditingController _ctrl = TextEditingController();
   bool _showPassword = false;
+  bool _isLoading = false;
+  String? _errorMessage;
 
   String get _initials {
     final parts = widget.email.split('@').first.split('.');
@@ -29,6 +30,33 @@ class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
       return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
     }
     return widget.email.isNotEmpty ? widget.email[0].toUpperCase() : 'JD';
+  }
+
+  Future<void> _handleSignIn() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final result = await ApiService.login(widget.email, _ctrl.text);
+
+      final role = result['role'] as String;
+
+      if (!mounted) return;
+
+      if (role == 'STUDENT') {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else if (role == 'STAFF') {
+        Navigator.pushReplacementNamed(context, '/staff');
+      }
+
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Invalid email or password';
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -71,7 +99,7 @@ class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
                   placeholder: '••••••••',
                   obscureText: !_showPassword,
                   autofocus: true,
-                  onSubmit: val.text.isNotEmpty ? widget.onSubmit : null,
+                  onSubmit: val.text.isNotEmpty && !_isLoading ? _handleSignIn : null,
                   suffix: IconButton(
                     onPressed: () => setState(() => _showPassword = !_showPassword),
                     icon: Icon(
@@ -82,6 +110,19 @@ class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
                   ),
                 ),
               ),
+              // Error message shown when login fails
+              if (_errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    _errorMessage!,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               const SizedBox(height: 4),
               Align(
                 alignment: Alignment.centerRight,
@@ -92,11 +133,12 @@ class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 8),
+              // Sign in button — shows spinner text when loading
               ValueListenableBuilder<TextEditingValue>(
                 valueListenable: _ctrl,
                 builder: (ctx2, val, child2) => AppPrimaryButton(
-                  label: 'Sign in',
-                  onPressed: val.text.isNotEmpty ? widget.onSubmit : null,
+                  label: _isLoading ? 'Signing in...' : 'Sign in',
+                  onPressed: val.text.isNotEmpty && !_isLoading ? _handleSignIn : null,
                 ),
               ),
               const SizedBox(height: 24),
