@@ -6,12 +6,15 @@ class SignInPasswordScreen extends StatefulWidget {
   final String email;
   final void Function() onBack;
   final void Function() onSetupPassword;
+  // Called when login succeeds — passes token and role back to main.dart
+  final void Function(String token, String role) onSuccess;
 
   const SignInPasswordScreen({
     super.key,
     required this.email,
     required this.onBack,
     required this.onSetupPassword,
+    required this.onSuccess,
   });
 
   @override
@@ -41,15 +44,13 @@ class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
     try {
       final result = await ApiService.login(widget.email, _ctrl.text);
 
+      final token = result['token'] as String;
       final role = result['role'] as String;
 
       if (!mounted) return;
 
-      if (role == 'STUDENT') {
-        Navigator.pushReplacementNamed(context, '/home');
-      } else if (role == 'STAFF') {
-        Navigator.pushReplacementNamed(context, '/staff');
-      }
+      // Pass token and role back to _AuthWrapper in main.dart
+      widget.onSuccess(token, role);
 
     } catch (e) {
       setState(() {
@@ -110,7 +111,7 @@ class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
                   ),
                 ),
               ),
-              // Error message shown when login fails
+              // Shows red error text if login fails
               if (_errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -133,7 +134,6 @@ class _SignInPasswordScreenState extends State<SignInPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              // Sign in button — shows spinner text when loading
               ValueListenableBuilder<TextEditingValue>(
                 valueListenable: _ctrl,
                 builder: (ctx2, val, child2) => AppPrimaryButton(

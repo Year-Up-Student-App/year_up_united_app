@@ -7,7 +7,8 @@ const _accent = Color(0xFFF25C3E);
 const _orange = Color(0xFFF8941F);
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String token;
+  const HomeScreen({super.key, required this.token});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadStudent() async {
-    final data = await ApiService.getStudent(1);
+    final data = await ApiService.getStudent(1, widget.token);
     setState(() {
       student = data;
     });
