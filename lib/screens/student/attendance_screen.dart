@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/screens/qr_scanner_screen.dart';
+import 'package:flutter_app/screens/student/qr_scanner_screen.dart';
 
-import '../config/app_config.dart';
+import '../../config/app_config.dart';
 
 class AttendanceScreen extends StatelessWidget {
   const AttendanceScreen({super.key});

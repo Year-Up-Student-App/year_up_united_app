@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/auth_widgets.dart';
+import '../../widgets/auth_widgets.dart';
 
 class AccountSetupScreen extends StatefulWidget {
   final void Function() onBack;

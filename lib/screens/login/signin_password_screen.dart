@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/auth_widgets.dart';
-import '../services/api_service.dart';
+import '../../widgets/auth_widgets.dart';
+import '../../services/api_service.dart';
 
 class SignInPasswordScreen extends StatefulWidget {
   final String email;
